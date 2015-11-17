@@ -5,7 +5,7 @@ use Scalar::Util ();
 
 requires 'uri_for';
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 sub uri {
   my ($c, $path, @args) = @_;
