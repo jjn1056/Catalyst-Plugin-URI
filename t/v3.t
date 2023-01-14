@@ -26,26 +26,10 @@ use Test::Most;
     $c->res->body( $c->uri("Example:url_to_self", [1]));
   }
 
-  package MyApp::Controller::Other;
-  $INC{'MyApp/Controller/Other.pm'} = __FILE__;
-
-  use base 'Catalyst::Controller';
-
-  sub uri_to_other :Local Args(0) Name(hi) {
-    my ($self, $c) = @_;
-    $c->res->body($c->uri("Example:url_to_self", [1])) unless $c->res->body;
-  }
-
-  sub named_uri :Local Args(0) {
-    my ($self, $c) = @_;
-    $c->res->body($c->uri("#hi"));
-    $c->detach("#hi");
-  }
-
   package MyApp;
   use Catalyst 'URI';
   
-  MyApp->config('Plugin::URI' => { version => 2 });
+  MyApp->config('Plugin::URI' => { version => 3 });
   MyApp->setup;
 }
 
@@ -71,13 +55,5 @@ use Catalyst::Test 'MyApp';
   is $res->content, 'http://localhost/example/url_to_self/1';
 }
 
-{
-  ok my $res = request "/other/uri_to_other";
-  is $res->content, 'http://localhost/example/url_to_self/1';
-}
 
-{
-  ok my $res = request "/other/named_uri";
-  is $res->content, 'http://localhost/other/uri_to_other';
-}
 done_testing;
